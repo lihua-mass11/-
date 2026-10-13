@@ -1,0 +1,32 @@
+[
+  {
+    "id": "n001",
+    "elderId": "e001",
+    "type": "sos",
+    "title": "张秀兰发起紧急求助",
+    "content": "老人于 10:05 触发一键求助，请及时联系确认情况。",
+    "createdAt": "2026-10-12T10:05:00",
+    "read": false,
+    "handled": false
+  },
+  {
+    "id": "n002",
+    "elderId": "e001",
+    "type": "medication",
+    "title": "张秀兰昨日未按时服药",
+    "content": "「硝苯地平缓释片」10-11 08:00 未确认服用。",
+    "createdAt": "2026-10-12T08:30:00",
+    "read": true,
+    "handled": false
+  },
+  {
+    "id": "n003",
+    "elderId": "e001",
+    "type": "inactive",
+    "title": "张秀兰长时间未活跃",
+    "content": "老人已超过 12 小时未在系统中活跃。",
+    "createdAt": "2026-10-08T15:00:00",
+    "read": true,
+    "handled": true
+  }
+]

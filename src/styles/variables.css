@@ -1,0 +1,48 @@
+:root {
+  /* ===== 品牌主色：沉稳墨绿 ===== */
+  --brand-primary: #2d6a4f;
+  --brand-primary-dark: #24553f;
+  --brand-primary-light: #6c9784;
+
+  /* 辅助色：暖橙 */
+  --brand-accent: #e07a3f;
+  --brand-accent-light: #f2b488;
+
+  /* 背景：柔和米白 */
+  --bg-page: #f5f3ef;
+  --bg-card: #ffffff;
+  --bg-sidebar: #274f3d;
+
+  /* 文本 */
+  --text-primary: #2c3a33;
+  --text-regular: #5b6b63;
+  --text-secondary: #8a9890;
+  --text-inverse: #f5f3ef;
+
+  /* 边框 */
+  --border-color: #e6e3dd;
+
+  /* 风险等级 */
+  --risk-normal: #52a06e;
+  --risk-normal-bg: #edf6f0;
+  --risk-watch: #e09a3f;
+  --risk-watch-bg: #fbf3e6;
+  --risk-alert: #d9534f;
+  --risk-alert-bg: #fbecec;
+
+  /* ===== 覆盖 Element Plus 主题 ===== */
+  --el-color-primary: #2d6a4f;
+  --el-color-primary-light-3: #6c9784;
+  --el-color-primary-light-5: #96b5a7;
+  --el-color-primary-light-7: #c0d2ca;
+  --el-color-primary-light-8: #d5e1dc;
+  --el-color-primary-light-9: #eaf0ee;
+  --el-color-primary-dark-2: #24553f;
+
+  --el-color-success: #52a06e;
+  --el-color-warning: #e09a3f;
+  --el-color-danger: #d9534f;
+
+  --el-border-radius-base: 8px;
+  --el-border-radius-small: 6px;
+}

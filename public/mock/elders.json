@@ -1,0 +1,14 @@
+[
+  {
+    "id": "e001",
+    "name": "张秀兰",
+    "age": 75,
+    "gender": "female",
+    "address": "北京市朝阳区阳光社区 3 号楼 2 单元 501",
+    "emergencyContact": "张伟",
+    "emergencyPhone": "13800001111",
+    "riskLevel": "alert",
+    "lastActiveAt": "2026-10-12T09:30:00",
+    "avatar": ""
+  }
+]

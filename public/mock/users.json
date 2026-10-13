@@ -1,0 +1,18 @@
+[
+  {
+    "id": "u001",
+    "username": "family01",
+    "password": "123456",
+    "name": "张伟",
+    "phone": "13800001111",
+    "avatar": ""
+  },
+  {
+    "id": "u002",
+    "username": "family02",
+    "password": "123456",
+    "name": "李娜",
+    "phone": "13900002222",
+    "avatar": ""
+  }
+]

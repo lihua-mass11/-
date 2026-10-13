@@ -1,0 +1,32 @@
+[
+  {
+    "id": "m001",
+    "elderId": "e001",
+    "name": "硝苯地平缓释片",
+    "dosage": "10mg",
+    "frequency": "每日一次",
+    "time": "08:00",
+    "note": "早餐后服用",
+    "enabled": true
+  },
+  {
+    "id": "m002",
+    "elderId": "e001",
+    "name": "阿司匹林肠溶片",
+    "dosage": "100mg",
+    "frequency": "每日一次",
+    "time": "08:00",
+    "note": "随餐服用",
+    "enabled": true
+  },
+  {
+    "id": "m003",
+    "elderId": "e001",
+    "name": "辛伐他汀片",
+    "dosage": "20mg",
+    "frequency": "每日一次",
+    "time": "20:00",
+    "note": "睡前服用",
+    "enabled": true
+  }
+]
