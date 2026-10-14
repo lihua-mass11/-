@@ -1,3 +1,3 @@
-export { default as MainLayout } from './MainLayout.vue'
-export { default as AppSidebar } from './AppSidebar.vue'
-export { default as AppHeader } from './AppHeader.vue'
+export { default as Layout } from './Layout.vue'
+export { default as MenuBar } from './menu/MenuBar.vue'
+export { default as NavBar } from './navigate/NavBar.vue'

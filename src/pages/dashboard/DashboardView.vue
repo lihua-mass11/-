@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useElderStore, useHealthStore, useMedicationStore, useNotificationStore, useSosStore } from '@/stores'
-import { NOTIFICATION_TYPE_META, TODAY } from '@/constants'
+import { useElderStore, useHealthStore, useMedicationStore, useNotificationStore, useSosStore } from '@/store'
+import { NOTIFICATION_TYPE_META, TODAY } from '@/types'
 import { fromNow, formatDateTime } from '@/utils/format'
-import { useRiskLevel } from '@/composables/useRiskLevel'
-import RiskTag from '@/components/RiskTag.vue'
-import StatCard from '@/components/StatCard.vue'
-import type { MedicationRecord } from '@/types'
+import { useRiskLevel } from '@/hooks/useRiskLevel'
+import RiskTag from '@/components/common/RiskTag.vue'
+import StatCard from '@/components/common/StatCard.vue'
+import type { MedicationRecordVO } from '@/types'
 
 const router = useRouter()
 const elderStore = useElderStore()
@@ -59,10 +59,49 @@ const latestNotifications = computed(() => {
   return notificationStore.listOf(elder.value.id).slice(0, 5)
 })
 
+/** 近 7 天日期序列（含今天，倒序展示） */
+const weekDays = computed(() => {
+  const base = new Date(TODAY)
+  const days: string[] = []
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(base)
+    d.setDate(base.getDate() - i)
+    const y = d.getFullYear()
+    const m = String(d.getMonth() + 1).padStart(2, '0')
+    const day = String(d.getDate()).padStart(2, '0')
+    days.push(`${y}-${m}-${day}`)
+  }
+  return days
+})
+
+/** 近 7 天每日用药统计（已服用 / 漏服） */
+const weekMedicationStats = computed(() => {
+  if (!elder.value) return []
+  const records = medicationStore.records.filter((r) => r.elderId === elder.value!.id)
+  return weekDays.value.map((date) => {
+    const dayRecords = records.filter((r) => r.date === date)
+    return {
+      date,
+      label: date.slice(5).replace('-', '/'),
+      taken: dayRecords.filter((r) => r.status === 'taken').length,
+      missed: dayRecords.filter((r) => r.status === 'missed').length,
+    }
+  })
+})
+
+const weekMax = computed(() => {
+  const counts = weekMedicationStats.value.flatMap((d) => [d.taken, d.missed])
+  return Math.max(1, ...counts)
+})
+
+function barHeight(value: number): string {
+  return `${Math.round((value / weekMax.value) * 100)}%`
+}
+
 /** 动态风险等级 */
 const { riskLevel } = useRiskLevel()
 
-function recordStatus(record: MedicationRecord | undefined): 'taken' | 'pending' | 'missed' {
+function recordStatus(record: MedicationRecordVO | undefined): 'taken' | 'pending' | 'missed' {
   return record?.status ?? 'pending'
 }
 
@@ -114,7 +153,7 @@ function goNotification() {
           :value="`${todayTaken}/${todayTotal}`"
           sub="已服用 / 计划总数"
           icon="FirstAidKit"
-          color="#2d6a4f"
+          color="#14939e"
         />
       </el-col>
       <el-col :span="6">
@@ -208,6 +247,36 @@ function goNotification() {
         </div>
       </el-col>
     </el-row>
+
+    <!-- 近 7 天用药统计 -->
+    <el-row :gutter="16" class="mt-16">
+      <el-col :span="24">
+        <div class="app-card">
+          <div class="app-card__title">近 7 天用药统计</div>
+          <div class="week-chart">
+            <div v-for="day in weekMedicationStats" :key="day.date" class="week-col">
+              <div class="week-bars">
+                <div
+                  class="bar bar-taken"
+                  :style="{ height: barHeight(day.taken) }"
+                  :title="`已服用 ${day.taken}`"
+                ></div>
+                <div
+                  class="bar bar-missed"
+                  :style="{ height: barHeight(day.missed) }"
+                  :title="`漏服 ${day.missed}`"
+                ></div>
+              </div>
+              <div class="week-label">{{ day.label }}</div>
+            </div>
+          </div>
+          <div class="week-legend">
+            <span class="legend-item"><i class="legend-dot taken"></i>已服用</span>
+            <span class="legend-item"><i class="legend-dot missed"></i>漏服</span>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -223,7 +292,7 @@ function goNotification() {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2d6a4f, #4c8a6b);
+  background: linear-gradient(135deg, #14939e, #55b8c2);
   color: #fff;
   font-size: 26px;
   font-weight: 600;
@@ -390,5 +459,81 @@ function goNotification() {
   border-radius: 50%;
   background: #d9534f;
   display: inline-block;
+}
+
+.week-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  padding: 8px 4px 0;
+}
+
+.week-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.week-bars {
+  width: 100%;
+  height: 140px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 4px;
+}
+
+.bar {
+  width: 22px;
+  min-height: 2px;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.4s ease;
+}
+
+.bar-taken {
+  background: var(--brand-primary);
+}
+
+.bar-missed {
+  background: #d9534f;
+}
+
+.week-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.week-legend {
+  display: flex;
+  gap: 20px;
+  margin-top: 14px;
+  justify-content: flex-end;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-regular);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.legend-dot.taken {
+  background: var(--brand-primary);
+}
+
+.legend-dot.missed {
+  background: #d9534f;
 }
 </style>

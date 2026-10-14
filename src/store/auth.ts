@@ -1,16 +1,16 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { User } from '@/types'
+import type { UserVO } from '@/types'
 import { login as apiLogin } from '@/api'
 
 const TOKEN_KEY = 'eldercare_token'
 const USER_KEY = 'eldercare_user'
 
-function loadStoredUser(): User | null {
+function loadStoredUser(): UserVO | null {
   const raw = localStorage.getItem(USER_KEY)
   if (!raw) return null
   try {
-    return JSON.parse(raw) as User
+    return JSON.parse(raw) as UserVO
   } catch {
     return null
   }
@@ -18,7 +18,7 @@ function loadStoredUser(): User | null {
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref<string>(localStorage.getItem(TOKEN_KEY) || '')
-  const user = ref<User | null>(loadStoredUser())
+  const user = ref<UserVO | null>(loadStoredUser())
 
   const isAuthenticated = computed(() => !!token.value)
   const displayName = computed(() => user.value?.name ?? user.value?.username ?? '')

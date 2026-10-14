@@ -28,5 +28,25 @@
     "time": "20:00",
     "note": "睡前服用",
     "enabled": true
+  },
+  {
+    "id": "m101",
+    "elderId": "e002",
+    "name": "盐酸二甲双胍片",
+    "dosage": "500mg",
+    "frequency": "每日两次",
+    "time": "08:00",
+    "note": "随餐服用",
+    "enabled": true
+  },
+  {
+    "id": "m102",
+    "elderId": "e002",
+    "name": "阿托伐他汀钙片",
+    "dosage": "20mg",
+    "frequency": "每日一次",
+    "time": "20:00",
+    "note": "睡前服用",
+    "enabled": true
   }
 ]

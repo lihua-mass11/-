@@ -1,6 +1,6 @@
 import { computed } from 'vue'
-import { useElderStore, useHealthStore, useMedicationStore, useSosStore } from '@/stores'
-import { TODAY } from '@/constants'
+import { useElderStore, useHealthStore, useMedicationStore, useSosStore } from '@/store'
+import { TODAY } from '@/types'
 import { evaluateRiskLevel } from '@/utils/risk'
 import type { RiskLevel } from '@/types'
 

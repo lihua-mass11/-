@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useElderStore, useHealthStore, useSosStore } from '@/stores'
-import { useRiskLevel } from '@/composables/useRiskLevel'
-import { RISK_LEVEL_META } from '@/constants'
+import { useElderStore, useHealthStore, useSosStore } from '@/store'
+import { useRiskLevel } from '@/hooks/useRiskLevel'
+import { RISK_LEVEL_META } from '@/types'
 import { formatDateTime, fromNow } from '@/utils/format'
-import RiskTag from '@/components/RiskTag.vue'
+import RiskTag from '@/components/common/RiskTag.vue'
 
 const elderStore = useElderStore()
 const healthStore = useHealthStore()
@@ -28,6 +28,19 @@ const riskMeta = computed(() => RISK_LEVEL_META[riskLevel.value])
 
 <template>
   <div class="page-container">
+    <!-- 老人切换导航 -->
+    <div v-if="elderStore.elders.length > 1" class="app-card elder-switch">
+      <span class="switch-label">守护老人</span>
+      <el-select
+        :model-value="elderStore.currentElderId"
+        style="width: 180px"
+        @update:model-value="elderStore.setCurrentElder"
+      >
+        <el-option v-for="e in elderStore.elders" :key="e.id" :label="e.name" :value="e.id" />
+      </el-select>
+      <span class="switch-hint">切换后，看板 / 用药 / 通知将同步显示该老人的信息</span>
+    </div>
+
     <!-- 基本信息 -->
     <div class="app-card">
       <div class="profile-head">
@@ -115,6 +128,24 @@ const riskMeta = computed(() => RISK_LEVEL_META[riskLevel.value])
 </template>
 
 <style scoped>
+.elder-switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.switch-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.switch-hint {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
 .profile-head {
   display: flex;
   align-items: center;
@@ -126,7 +157,7 @@ const riskMeta = computed(() => RISK_LEVEL_META[riskLevel.value])
   width: 68px;
   height: 68px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2d6a4f, #4c8a6b);
+  background: linear-gradient(135deg, #14939e, #55b8c2);
   color: #fff;
   font-size: 28px;
   font-weight: 600;

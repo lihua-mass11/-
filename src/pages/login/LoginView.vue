@@ -2,8 +2,8 @@
 import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
-import { useAuthStore } from '@/stores'
-import type { LoginForm } from '@/types'
+import { useAuthStore } from '@/store'
+import type { LoginDTO } from '@/types'
 
 const router = useRouter()
 const route = useRoute()
@@ -11,7 +11,10 @@ const authStore = useAuthStore()
 
 const formRef = ref<FormInstance>()
 const loading = ref(false)
-const form = reactive<LoginForm>({ username: 'family01', password: '123456' })
+const form = reactive<LoginDTO>({
+  username: (route.query.username as string) || 'family01',
+  password: route.query.username ? '' : '123456',
+})
 
 const rules: FormRules = {
   username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
@@ -41,8 +44,8 @@ async function handleLogin() {
       <div class="brand-inner">
         <div class="brand-logo">
           <svg viewBox="0 0 64 64" width="46" height="46">
-            <circle cx="32" cy="24" r="11" fill="#f5f3ef" />
-            <path d="M11 55c0-12 9.5-19.5 21-19.5S53 43 53 55" fill="#f5f3ef" />
+            <circle cx="32" cy="24" r="11" fill="#f5f8f8" />
+            <path d="M11 55c0-12 9.5-19.5 21-19.5S53 43 53 55" fill="#f5f8f8" />
             <circle cx="32" cy="45" r="8" fill="#e07a3f" />
           </svg>
         </div>
@@ -101,6 +104,10 @@ async function handleLogin() {
           <el-icon><InfoFilled /></el-icon>
           演示账号：family01 / 123456
         </div>
+
+        <div class="login-footer">
+          还没有账号？<router-link class="register-link" :to="{ name: 'register' }">立即注册</router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -114,7 +121,7 @@ async function handleLogin() {
 
 .login-brand {
   flex: 1.1;
-  background: linear-gradient(160deg, #2d6a4f 0%, #1f4232 100%);
+  background: linear-gradient(160deg, #14939e 0%, #0e6b72 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,7 +172,7 @@ async function handleLogin() {
 }
 
 .brand-features .el-icon {
-  color: #f2b488;
+  color: #f0b181;
 }
 
 .login-form-panel {
@@ -216,5 +223,21 @@ async function handleLogin() {
   justify-content: center;
   font-size: 13px;
   color: var(--text-secondary);
+}
+
+.login-footer {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.register-link {
+  color: var(--brand-primary);
+  text-decoration: none;
+  font-weight: 500;
 }
 </style>

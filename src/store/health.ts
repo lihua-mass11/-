@@ -1,10 +1,10 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { HealthRecord } from '@/types'
+import type { HealthRecordVO } from '@/types'
 import { fetchHealthRecords } from '@/api'
 
 export const useHealthStore = defineStore('health', () => {
-  const healthRecords = ref<HealthRecord[]>([])
+  const healthRecords = ref<HealthRecordVO[]>([])
   const loaded = ref(false)
 
   /** 某位老人的健康打卡记录（按日期倒序） */

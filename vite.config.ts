@@ -14,5 +14,9 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     open: true,
+    allowedHosts: [
+      '2a398764.r38.cpolar.top',
+      '*'
+    ],
   },
 })

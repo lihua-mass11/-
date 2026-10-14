@@ -1,4 +1,4 @@
-import type { MedicationRecord, RiskLevel, SosRecord } from '@/types'
+import type { MedicationRecordVO, RiskLevel, SosRecordVO } from '@/types'
 
 /**
  * 自动风险评估规则（初赛简化版）：
@@ -22,11 +22,11 @@ export function evaluateRiskLevel(input: {
 }
 
 /** 从用药打卡记录统计今日/近期漏服情况 */
-export function countMissedMedication(records: MedicationRecord[]): number {
+export function countMissedMedication(records: MedicationRecordVO[]): number {
   return records.filter((r) => r.status === 'missed').length
 }
 
 /** 统计未处理的求助记录 */
-export function hasUnhandledSos(records: SosRecord[]): boolean {
+export function hasUnhandledSos(records: SosRecordVO[]): boolean {
   return records.some((r) => r.status === 'pending')
 }

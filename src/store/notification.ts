@@ -1,10 +1,10 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { Notification } from '@/types'
+import type { NotificationVO } from '@/types'
 import { fetchNotifications } from '@/api'
 
 export const useNotificationStore = defineStore('notification', () => {
-  const notifications = ref<Notification[]>([])
+  const notifications = ref<NotificationVO[]>([])
   const loaded = ref(false)
 
   /** 某位老人的通知（按时间倒序） */
@@ -16,7 +16,8 @@ export const useNotificationStore = defineStore('notification', () => {
 
   /** 未读通知数 */
   const unreadCount = computed(
-    () => (elderId: string) => notifications.value.filter((n) => n.elderId === elderId && !n.read).length,
+    () => (elderId: string) =>
+      notifications.value.filter((n) => n.elderId === elderId && !n.read).length,
   )
 
   async function init() {

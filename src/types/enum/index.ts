@@ -1,4 +1,4 @@
-import type { NotificationType, RiskLevel } from '@/types'
+import type { NotificationChannel, NotificationType, RiskLevel } from '../type'
 
 /** 风险等级展示配置 */
 export const RISK_LEVEL_META: Record<
@@ -18,6 +18,16 @@ export const NOTIFICATION_TYPE_META: Record<
   medication: { label: '未按时服药', color: '#e09a3f', icon: 'Clock' },
   inactive: { label: '长时间未活跃', color: '#8a9890', icon: 'Warning' },
   sos: { label: '紧急求助', color: '#d9534f', icon: 'BellFilled' },
+}
+
+/** 通知来源渠道展示配置 */
+export const CHANNEL_META: Record<
+  NotificationChannel,
+  { label: string; color: string; icon: string }
+> = {
+  app: { label: 'App 推送', color: '#14939e', icon: 'Bell' },
+  wechat: { label: '微信', color: '#52a06e', icon: 'ChatDotRound' },
+  email: { label: '邮箱', color: '#e09a3f', icon: 'Message' },
 }
 
 /** 健康打卡心情选项 */

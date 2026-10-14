@@ -53,5 +53,82 @@
     "takenAt": "2026-10-11T08:10:00",
     "status": "taken",
     "date": "2026-10-11"
+  },
+  {
+    "id": "r101",
+    "elderId": "e002",
+    "medicationId": "m101",
+    "medicationName": "盐酸二甲双胍片",
+    "dosage": "500mg",
+    "scheduledTime": "2026-10-12T08:00:00",
+    "takenAt": "2026-10-12T08:03:00",
+    "status": "taken",
+    "date": "2026-10-12"
+  },
+  {
+    "id": "r102",
+    "elderId": "e002",
+    "medicationId": "m102",
+    "medicationName": "阿托伐他汀钙片",
+    "dosage": "20mg",
+    "scheduledTime": "2026-10-12T20:00:00",
+    "takenAt": null,
+    "status": "pending",
+    "date": "2026-10-12"
+  },
+  {
+    "id": "r103",
+    "elderId": "e002",
+    "medicationId": "m101",
+    "medicationName": "盐酸二甲双胍片",
+    "dosage": "500mg",
+    "scheduledTime": "2026-10-11T08:00:00",
+    "takenAt": null,
+    "status": "missed",
+    "date": "2026-10-11"
+  },
+  {
+    "id": "r104",
+    "elderId": "e002",
+    "medicationId": "m102",
+    "medicationName": "阿托伐他汀钙片",
+    "dosage": "20mg",
+    "scheduledTime": "2026-10-11T20:00:00",
+    "takenAt": "2026-10-11T20:05:00",
+    "status": "taken",
+    "date": "2026-10-11"
+  },
+  {
+    "id": "r105",
+    "elderId": "e002",
+    "medicationId": "m101",
+    "medicationName": "盐酸二甲双胍片",
+    "dosage": "500mg",
+    "scheduledTime": "2026-10-10T08:00:00",
+    "takenAt": "2026-10-10T08:08:00",
+    "status": "taken",
+    "date": "2026-10-10"
+  },
+  {
+    "id": "r106",
+    "elderId": "e002",
+    "medicationId": "m102",
+    "medicationName": "阿托伐他汀钙片",
+    "dosage": "20mg",
+    "scheduledTime": "2026-10-10T20:00:00",
+    "takenAt": "2026-10-10T20:12:00",
+    "status": "taken",
+    "date": "2026-10-10"
+  },
+  {
+    "id": "r107",
+    "elderId": "e002",
+    "medicationId": "m101",
+    "medicationName": "盐酸二甲双胍片",
+    "dosage": "500mg",
+    "scheduledTime": "2026-10-09T08:00:00",
+    "takenAt": "2026-10-09T08:02:00",
+    "status": "taken",
+    "date": "2026-10-09"
   }
 ]

@@ -1,11 +1,11 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { Elder } from '@/types'
+import type { ElderVO } from '@/types'
 import { fetchBindings, fetchElders } from '@/api'
 import { useAuthStore } from './auth'
 
 export const useElderStore = defineStore('elder', () => {
-  const elders = ref<Elder[]>([])
+  const elders = ref<ElderVO[]>([])
   const currentElderId = ref<string>('')
   const loaded = ref(false)
 

@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { Medication, MedicationForm, MedicationRecord } from '@/types'
+import type { MedicationVO, MedicationDTO, MedicationRecordVO } from '@/types'
 import { fetchMedicationRecords, fetchMedications } from '@/api'
 
 function genId(prefix: string): string {
@@ -8,8 +8,8 @@ function genId(prefix: string): string {
 }
 
 export const useMedicationStore = defineStore('medication', () => {
-  const medications = ref<Medication[]>([])
-  const records = ref<MedicationRecord[]>([])
+  const medications = ref<MedicationVO[]>([])
+  const records = ref<MedicationRecordVO[]>([])
   const loaded = ref(false)
 
   /** 某位老人的用药计划 */
@@ -37,12 +37,12 @@ export const useMedicationStore = defineStore('medication', () => {
     loaded.value = true
   }
 
-  function addMedication(form: MedicationForm) {
-    const item: Medication = { id: genId('m'), ...form }
+  function addMedication(form: MedicationDTO) {
+    const item: MedicationVO = { id: genId('m'), ...form }
     medications.value.unshift(item)
   }
 
-  function updateMedication(id: string, form: MedicationForm) {
+  function updateMedication(id: string, form: MedicationDTO) {
     const target = medications.value.find((m) => m.id === id)
     if (target) Object.assign(target, form)
   }

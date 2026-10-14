@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import AppSidebar from './AppSidebar.vue'
-import AppHeader from './AppHeader.vue'
-import { useElderStore, useHealthStore, useMedicationStore, useNotificationStore, useSosStore } from '@/stores'
+import MenuBar from './menu/MenuBar.vue'
+import NavBar from './navigate/NavBar.vue'
+import Content from './conent/Content.vue'
+import { useElderStore, useHealthStore, useMedicationStore, useNotificationStore, useSosStore } from '@/store'
 
 const elderStore = useElderStore()
 const medicationStore = useMedicationStore()
@@ -10,6 +11,7 @@ const healthStore = useHealthStore()
 const sosStore = useSosStore()
 const notificationStore = useNotificationStore()
 
+const isCollapse = ref(false)
 const loading = ref(false)
 
 async function bootstrap() {
@@ -32,16 +34,10 @@ onMounted(bootstrap)
 
 <template>
   <div class="main-layout">
-    <AppSidebar />
+    <MenuBar :collapse="isCollapse" />
     <div class="main-body">
-      <AppHeader />
-      <main class="main-content" v-loading="loading">
-        <router-view v-slot="{ Component }">
-          <transition name="fade" mode="out-in">
-            <component :is="Component" />
-          </transition>
-        </router-view>
-      </main>
+      <NavBar :collapse="isCollapse" @toggle-collapse="isCollapse = !isCollapse" />
+      <Content :loading="loading" />
     </div>
   </div>
 </template>
@@ -57,11 +53,5 @@ onMounted(bootstrap)
   display: flex;
   flex-direction: column;
   min-width: 0;
-}
-
-.main-content {
-  flex: 1;
-  overflow-y: auto;
-  background: var(--bg-page);
 }
 </style>

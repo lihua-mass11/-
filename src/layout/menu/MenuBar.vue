@@ -2,6 +2,8 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
+defineProps<{ collapse: boolean }>()
+
 const route = useRoute()
 const activeMenu = computed(() => route.path)
 
@@ -9,21 +11,29 @@ const menus = [
   { path: '/dashboard', label: '首页看板', icon: 'Odometer' },
   { path: '/medication', label: '用药管理', icon: 'FirstAidKit' },
   { path: '/notification', label: '通知中心', icon: 'Bell' },
-  { path: '/elder', label: '老人档案', icon: 'User' },
+  { path: '/archive', label: '老人存档', icon: 'User' },
+  { path: '/assist', label: '远程协助', icon: 'Monitor' },
 ]
 </script>
 
 <template>
-  <aside class="app-sidebar">
+  <aside class="app-sidebar" :class="{ 'is-collapsed': collapse }">
     <div class="sidebar-logo">
       <div class="logo-icon">
         <svg viewBox="0 0 64 64" width="30" height="30">
-          <circle cx="32" cy="24" r="11" fill="#f5f3ef" />
-          <path d="M11 55c0-12 9.5-19.5 21-19.5S53 43 53 55" fill="#f5f3ef" />
-          <circle cx="32" cy="45" r="8" fill="#e07a3f" />
+          <path
+            d="M32 55C16 43 9 30 9 20 9 12.5 14.5 7 22 7c5.5 0 9 2.5 10 6 1-3.5 4.5-6 10-6 7.5 0 13 5.5 13 13 0 10-7 23-23 35z"
+            fill="#f5f8f8"
+          />
+          <path
+            d="M32 55C16 43 9 30 9 20 9 12.5 14.5 7 22 7c5.5 0 9 2.5 10 6 1-3.5 4.5-6 10-6 7.5 0 13 5.5 13 13 0 10-7 23-23 35z"
+            fill="none"
+            stroke="#e07a3f"
+            stroke-width="3"
+          />
         </svg>
       </div>
-      <div class="logo-text">
+      <div v-show="!collapse" class="logo-text">
         <span class="logo-title">银龄守护</span>
         <span class="logo-sub">家属端 · 智慧养老</span>
       </div>
@@ -31,19 +41,21 @@ const menus = [
 
     <el-menu
       :default-active="activeMenu"
+      :collapse="collapse"
+      :collapse-transition="false"
       router
       class="sidebar-menu"
       background-color="transparent"
-      text-color="#c4d6cc"
+      text-color="#b8dadd"
       active-text-color="#ffffff"
     >
       <el-menu-item v-for="menu in menus" :key="menu.path" :index="menu.path">
         <el-icon><component :is="menu.icon" /></el-icon>
-        <span>{{ menu.label }}</span>
+        <template #title><span>{{ menu.label }}</span></template>
       </el-menu-item>
     </el-menu>
 
-    <div class="sidebar-footer">
+    <div v-show="!collapse" class="sidebar-footer">
       <span>轻量级智能守护系统</span>
     </div>
   </aside>
@@ -53,18 +65,33 @@ const menus = [
 .app-sidebar {
   width: 220px;
   height: 100%;
-  background: linear-gradient(180deg, #274f3d 0%, #1f4232 100%);
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #0e6b72 0%, #0a5056 100%);
   display: flex;
   flex-direction: column;
   color: #fff;
+  transition: width 0.2s ease;
+  overflow: hidden;
+}
+
+.app-sidebar.is-collapsed {
+  width: 64px;
 }
 
 .sidebar-logo {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 22px 20px;
+  height: 84px;
+  padding: 0 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.app-sidebar.is-collapsed .sidebar-logo {
+  justify-content: center;
+  padding: 0;
 }
 
 .logo-icon {
@@ -99,6 +126,11 @@ const menus = [
   flex: 1;
   border-right: none;
   padding: 12px 10px;
+  overflow-x: hidden;
+}
+
+.app-sidebar.is-collapsed .sidebar-menu {
+  padding: 12px 0;
 }
 
 .sidebar-menu :deep(.el-menu-item) {
@@ -117,10 +149,22 @@ const menus = [
   font-weight: 600;
 }
 
+/* 折叠时：菜单项铺满、图标真正居中 */
+.app-sidebar.is-collapsed .sidebar-menu :deep(.el-menu-item) {
+  justify-content: center;
+  padding: 0;
+}
+
+.app-sidebar.is-collapsed .sidebar-menu :deep(.el-menu-item .el-icon) {
+  margin: 0;
+}
+
 .sidebar-footer {
   padding: 16px 20px;
   font-size: 12px;
   color: rgba(255, 255, 255, 0.4);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>

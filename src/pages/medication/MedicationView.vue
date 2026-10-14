@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
-import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
-import { useElderStore, useMedicationStore } from '@/stores'
-import { FREQUENCY_OPTIONS } from '@/constants'
-import type { Medication, MedicationForm } from '@/types'
+import { ElMessage, ElMessageBox, type FormInstance, type FormRules, type UploadFile } from 'element-plus'
+import { useElderStore, useMedicationStore } from '@/store'
+import { FREQUENCY_OPTIONS } from '@/types'
+import type { MedicationDTO, MedicationVO } from '@/types'
 
 const elderStore = useElderStore()
 const medicationStore = useMedicationStore()
@@ -20,17 +20,18 @@ const editingId = ref<string | null>(null)
 const formRef = ref<FormInstance>()
 const saving = ref(false)
 
-const defaultForm = (): MedicationForm => ({
+const defaultForm = (): MedicationDTO => ({
   elderId: elder.value?.id ?? '',
   name: '',
   dosage: '',
   frequency: '每日一次',
   time: '08:00',
   note: '',
+  image: '',
   enabled: true,
 })
 
-const form = reactive<MedicationForm>(defaultForm())
+const form = reactive<MedicationDTO>(defaultForm())
 
 const rules: FormRules = {
   name: [{ required: true, message: '请输入药品名称', trigger: 'blur' }],
@@ -51,7 +52,7 @@ function openAdd() {
   dialogVisible.value = true
 }
 
-function openEdit(row: Medication) {
+function openEdit(row: MedicationVO) {
   editingId.value = row.id
   Object.assign(form, {
     elderId: row.elderId,
@@ -60,9 +61,29 @@ function openEdit(row: Medication) {
     frequency: row.frequency,
     time: row.time,
     note: row.note ?? '',
+    image: row.image ?? '',
     enabled: row.enabled,
   })
   dialogVisible.value = true
+}
+
+/** 选择药品图片：读取为 base64 存入表单 */
+function handleImageChange(file: UploadFile) {
+  const raw = file.raw
+  if (!raw) return
+  if (raw.size > 2 * 1024 * 1024) {
+    ElMessage.warning('图片大小不能超过 2MB')
+    return
+  }
+  const reader = new FileReader()
+  reader.onload = () => {
+    form.image = reader.result as string
+  }
+  reader.readAsDataURL(raw)
+}
+
+function removeImage() {
+  form.image = ''
 }
 
 async function handleSave() {
@@ -83,7 +104,7 @@ async function handleSave() {
   }
 }
 
-function handleDelete(row: Medication) {
+function handleDelete(row: MedicationVO) {
   ElMessageBox.confirm(`确定删除「${row.name}」的用药计划吗？`, '删除确认', {
     confirmButtonText: '删除',
     cancelButtonText: '取消',
@@ -96,7 +117,7 @@ function handleDelete(row: Medication) {
     .catch(() => {})
 }
 
-function handleToggle(row: Medication) {
+function handleToggle(row: MedicationVO) {
   medicationStore.toggleEnabled(row.id)
   ElMessage.success(row.enabled ? '已停用' : '已启用')
 }
@@ -118,7 +139,10 @@ function handleToggle(row: Medication) {
       <el-table :data="list" stripe style="width: 100%">
         <el-table-column prop="name" label="药品名称" min-width="140">
           <template #default="{ row }">
-            <span class="med-name">{{ row.name }}</span>
+            <div class="med-name-cell">
+              <img v-if="row.image" :src="row.image" class="med-thumb" alt="药品图片" />
+              <span class="med-name">{{ row.name }}</span>
+            </div>
           </template>
         </el-table-column>
         <el-table-column prop="dosage" label="剂量" width="100" />
@@ -142,11 +166,11 @@ function handleToggle(row: Medication) {
         </el-table-column>
         <el-table-column label="操作" width="200" fixed="right">
           <template #default="{ row }">
-            <el-button link type="primary" size="small" @click="openEdit(row as Medication)">编辑</el-button>
-            <el-button link :type="row.enabled ? 'warning' : 'success'" size="small" @click="handleToggle(row as Medication)">
+            <el-button link type="primary" size="small" @click="openEdit(row as MedicationVO)">编辑</el-button>
+            <el-button link :type="row.enabled ? 'warning' : 'success'" size="small" @click="handleToggle(row as MedicationVO)">
               {{ row.enabled ? '停用' : '启用' }}
             </el-button>
-            <el-button link type="danger" size="small" @click="handleDelete(row as Medication)">删除</el-button>
+            <el-button link type="danger" size="small" @click="handleDelete(row as MedicationVO)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -178,6 +202,28 @@ function handleToggle(row: Medication) {
         <el-form-item label="备注">
           <el-input v-model="form.note" type="textarea" :rows="2" placeholder="如：早餐后服用（选填）" />
         </el-form-item>
+        <el-form-item label="药品图片">
+          <div>
+            <div v-if="form.image" class="image-preview">
+              <img :src="form.image" alt="药品图片" />
+              <el-button size="small" type="danger" plain @click="removeImage">移除</el-button>
+            </div>
+            <el-upload
+              v-else
+              action="#"
+              :auto-upload="false"
+              :show-file-list="false"
+              accept="image/*"
+              :on-change="handleImageChange"
+            >
+              <el-button>
+                <el-icon><Plus /></el-icon>
+                上传图片
+              </el-button>
+            </el-upload>
+            <div class="form-tip">支持上传药盒 / 药片照片，大小不超过 2MB</div>
+          </div>
+        </el-form-item>
         <el-form-item label="启用状态">
           <el-switch v-model="form.enabled" />
         </el-form-item>
@@ -194,6 +240,42 @@ function handleToggle(row: Medication) {
 .med-name {
   font-weight: 500;
   color: var(--text-primary);
+}
+
+.med-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.med-thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.image-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.image-preview img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+}
+
+.form-tip {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
 }
 
 .med-time {

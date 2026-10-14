@@ -14,5 +14,13 @@
     "status": "handled",
     "handledAt": "2026-10-08T16:45:00",
     "note": "误触求助按钮"
+  },
+  {
+    "id": "s101",
+    "elderId": "e002",
+    "triggeredAt": "2026-10-12T08:02:00",
+    "status": "pending",
+    "handledAt": null,
+    "note": "老人自述头晕"
   }
 ]

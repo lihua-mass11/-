@@ -1,10 +1,10 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { SosRecord } from '@/types'
+import type { SosRecordVO } from '@/types'
 import { fetchSosRecords } from '@/api'
 
 export const useSosStore = defineStore('sos', () => {
-  const sosRecords = ref<SosRecord[]>([])
+  const sosRecords = ref<SosRecordVO[]>([])
   const loaded = ref(false)
 
   /** 某位老人的求助记录（按时间倒序） */
@@ -16,7 +16,8 @@ export const useSosStore = defineStore('sos', () => {
 
   /** 是否存在未处理的求助 */
   const hasPending = computed(
-    () => (elderId: string) => sosRecords.value.some((r) => r.elderId === elderId && r.status === 'pending'),
+    () => (elderId: string) =>
+      sosRecords.value.some((r) => r.elderId === elderId && r.status === 'pending'),
   )
 
   async function init() {

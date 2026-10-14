@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { RiskLevel } from '@/types'
-import { RISK_LEVEL_META } from '@/constants'
+import { RISK_LEVEL_META } from '@/types'
 
 const props = defineProps<{ level: RiskLevel }>()
 

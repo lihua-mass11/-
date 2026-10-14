@@ -1,8 +1,8 @@
 import request from './request'
-import type { HealthRecord } from '@/types'
+import type { HealthRecordVO } from '@/types'
 
 /** 读取健康打卡记录 */
-export async function fetchHealthRecords(): Promise<HealthRecord[]> {
-  const { data } = await request.get<HealthRecord[]>('/healthRecords.json')
+export async function fetchHealthRecords(): Promise<HealthRecordVO[]> {
+  const { data } = await request.get<HealthRecordVO[]>('/healthRecords.json')
   return data
 }

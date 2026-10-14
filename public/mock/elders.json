@@ -10,5 +10,17 @@
     "riskLevel": "alert",
     "lastActiveAt": "2026-10-12T09:30:00",
     "avatar": ""
+  },
+  {
+    "id": "e002",
+    "name": "王建国",
+    "age": 82,
+    "gender": "male",
+    "address": "北京市海淀区清河街道 12 号院 1 单元 302",
+    "emergencyContact": "王丽",
+    "emergencyPhone": "13900002222",
+    "riskLevel": "watch",
+    "lastActiveAt": "2026-10-12T08:10:00",
+    "avatar": ""
   }
 ]

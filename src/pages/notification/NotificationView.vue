@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { useElderStore, useNotificationStore, useSosStore } from '@/stores'
-import { NOTIFICATION_TYPE_META } from '@/constants'
+import { useElderStore, useNotificationStore, useSosStore } from '@/store'
+import { CHANNEL_META, NOTIFICATION_TYPE_META } from '@/types'
 import { formatDateTime } from '@/utils/format'
-import type { Notification, NotificationType } from '@/types'
+import type { NotificationVO, NotificationType } from '@/types'
 
 const elderStore = useElderStore()
 const notificationStore = useNotificationStore()
@@ -29,11 +29,11 @@ function typeCount(type: 'all' | NotificationType): number {
   return allList.value.filter((n) => n.type === type).length
 }
 
-function handleRead(notice: Notification) {
+function handleRead(notice: NotificationVO) {
   notificationStore.markRead(notice.id)
 }
 
-function handleNotice(notice: Notification) {
+function handleNotice(notice: NotificationVO) {
   // 处理 SOS 通知时联动处理求助记录
   if (notice.type === 'sos') {
     const pending = sosStore.sosRecords.filter(
@@ -107,6 +107,10 @@ function handleMarkAllRead() {
             <div class="notice-meta">
               <span class="type-label" :style="{ color: NOTIFICATION_TYPE_META[notice.type].color }">
                 {{ NOTIFICATION_TYPE_META[notice.type].label }}
+              </span>
+              <span class="channel-label" :style="{ color: CHANNEL_META[notice.channel].color }">
+                <el-icon><component :is="CHANNEL_META[notice.channel].icon" /></el-icon>
+                {{ CHANNEL_META[notice.channel].label }}
               </span>
               <span>{{ formatDateTime(notice.createdAt) }}</span>
             </div>
@@ -217,6 +221,17 @@ function handleMarkAllRead() {
 
 .type-label {
   font-weight: 500;
+}
+
+.channel-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+
+.channel-label .el-icon {
+  font-size: 14px;
 }
 
 .notice-action {

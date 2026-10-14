@@ -1,8 +1,8 @@
 import request from './request'
-import type { Notification } from '@/types'
+import type { NotificationVO } from '@/types'
 
 /** 读取通知记录 */
-export async function fetchNotifications(): Promise<Notification[]> {
-  const { data } = await request.get<Notification[]>('/notifications.json')
+export async function fetchNotifications(): Promise<NotificationVO[]> {
+  const { data } = await request.get<NotificationVO[]>('/notifications.json')
   return data
 }
